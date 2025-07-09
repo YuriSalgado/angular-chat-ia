@@ -1,0 +1,70 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      style="color: white; margin-right: 6px"
+    >
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+      />
+    </svg>
+    <h1>Nolabel Chat</h1>
+  </div>
+  <div class="model-selector">
+    <label for="modelSelect">Modelo:</label>
+    <select id="modelSelect" [(ngModel)]="modelSelected">
+      <option value="gpt">GPT (OpenAI)</option>
+      <option value="gemini">Gemini (Google)</option>
+      <option value="anthropic">Anthropic</option>
+    </select>
+  </div>
+  <div class="chat-window" #scrollContainer>
+    <div
+      *ngFor="let msg of messages"
+      [ngClass]="msg.sender === 'Human' ? 'human-message' : 'ia-message'"
+      class="message-wrapper"
+    >
+      <div class="message">
+        <div class="text">{{ msg.text }}</div>
+      </div>
+    </div>
+
+    <div *ngIf="isTyping" class="message-wrapper ia-message">
+      <div class="message thinking-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <input
+      [(ngModel)]="userMessage"
+      (keyup.enter)="sendMessage()"
+      [placeholder]="
+        'Converse com o ' +
+        (modelSelected === 'gpt'
+          ? 'GPT'
+          : modelSelected === 'gemini'
+          ? 'Gemini'
+          : 'Anthropic') +
+        '...'
+      "
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+    <button
+      (click)="sendMessage()"
+      [disabled]="!userMessage || userMessage.trim() === ''"
+    >
+      Enviar
+    </button>
+  </div>
+</div>
